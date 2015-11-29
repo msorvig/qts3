@@ -1,0 +1,22 @@
+{
+  "name": "com.github.msorvig.s3",
+  "description": "C++ Qt API for Amazon S3",
+  "author": {
+    "name": "Morten Johan Sørvig",
+    "email": "msorvig@gmail.com"
+  },
+  "repository": {
+    "type": "GITHUB",
+    "url": "git@github.com:msorvig/qts3.git"
+  },
+  "version": {
+    "label": "0.0.1",
+    "revision": "",
+    "fingerprint": ""
+  },
+  "dependencies": [
+  ],
+  "license": "MIT",
+  "pri_filename": "qts3.pri",
+  "webpage": ""
+}
