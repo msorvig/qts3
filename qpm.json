@@ -17,6 +17,6 @@
   "dependencies": [
   ],
   "license": "MIT",
-  "pri_filename": "qts3.pri",
+  "pri_filename": "com_github_msorvig_s3.pri",
   "webpage": ""
 }
