@@ -330,7 +330,7 @@ void TestQtS3::location()
 
     // US bucket
     {
-        QtS3Reply<QByteArray> reply = s3.location("qtestbucket-us");
+        QtS3Reply<QByteArray> reply = s3.location(testBucketUs);
         QVERIFY(reply.isSuccess());
         QCOMPARE(reply.value(), QByteArray("us-east-1"));
     }
@@ -372,7 +372,7 @@ void TestQtS3::put()
     // US bucket
     {
         QtS3Reply<void> reply =
-            s3.put("qtestbucket-us", "foo-object", "foo-content-us", QStringList());
+            s3.put(testBucketUs, "foo-object", "foo-content-us", QStringList());
         QVERIFY(reply.isSuccess());
         QCOMPARE(reply.s3Error(), QtS3ReplyBase::NoError);
         QCOMPARE(reply.s3ErrorString(), QString());
@@ -407,13 +407,13 @@ void TestQtS3::exists()
     QtS3 s3(awsKeyId, awsSecretKey);
 
     {
-        QtS3Reply<bool> exists = s3.exists("qtestbucket-us", "foo-object");
+        QtS3Reply<bool> exists = s3.exists(testBucketUs, "foo-object");
         QVERIFY(exists.isSuccess());
         QVERIFY(exists.value());
     }
 
     {
-        QtS3Reply<bool> exists = s3.exists("qtestbucket-us", "foo-object-notcreated");
+        QtS3Reply<bool> exists = s3.exists(testBucketUs, "foo-object-notcreated");
         QVERIFY(exists.isSuccess());
         QVERIFY(!exists.value());
     }
@@ -439,14 +439,14 @@ void TestQtS3::size()
 
     // exisiting files
     {
-        QtS3Reply<int> sizeReply = s3.size("qtestbucket-us", "foo-object");
+        QtS3Reply<int> sizeReply = s3.size(testBucketUs, "foo-object");
         QVERIFY(sizeReply.isSuccess());
         QCOMPARE(sizeReply.value(), 14);
     }
 
     // Error case: object does not exist
     {
-        QtS3Reply<int> sizeReply = s3.size("qtestbucket-us", "foo-object-notcreated");
+        QtS3Reply<int> sizeReply = s3.size(testBucketUs, "foo-object-notcreated");
         QVERIFY(!sizeReply.isSuccess());
         // value is undefined
     }
@@ -478,7 +478,7 @@ void TestQtS3::get()
 
     // Error case: Empty path
     {
-        QtS3Reply<QByteArray> contents = s3.get("qtestbucket-us", "");
+        QtS3Reply<QByteArray> contents = s3.get(testBucketUs, "");
         QCOMPARE(contents.s3Error(), QtS3ReplyBase::ObjectNameInvalidError);
     }
 
@@ -490,13 +490,13 @@ void TestQtS3::get()
 
     // Error case: Path not found
     {
-        QtS3Reply<QByteArray> contents = s3.get("qtestbucket-us", "lskfjsloafkjfldkj");
+        QtS3Reply<QByteArray> contents = s3.get(testBucketUs, "lskfjsloafkjfldkj");
         QCOMPARE(contents.s3Error(), QtS3ReplyBase::ObjectNotFoundError);
     }
 
     // Us bucket
     {
-        QtS3Reply<QByteArray> contents = s3.get("qtestbucket-us", "foo-object");
+        QtS3Reply<QByteArray> contents = s3.get(testBucketUs, "foo-object");
         QVERIFY(contents.isSuccess());
         QCOMPARE(contents.value(), QByteArray("foo-content-us"));
     }
