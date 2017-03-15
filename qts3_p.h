@@ -14,36 +14,6 @@ QPM_BEGIN_NAMESPACE(com, github, msorvig, s3)
 Q_DECLARE_LOGGING_CATEGORY(qts3_API)
 Q_DECLARE_LOGGING_CATEGORY(qts3_Internal)
 
-class QtS3ReplyPrivate
-{
-public:
-    QtS3ReplyPrivate();
-    QtS3ReplyPrivate(QtS3ReplyBase::S3Error, QString errorString);
-
-    QByteArray m_byteArrayData;
-    bool m_intAndBoolDataValid;
-    int m_intAndBoolData;
-
-    QNetworkReply *m_networkReply;
-
-    QtS3ReplyBase::S3Error m_s3Error;
-    QString m_s3ErrorString;
-
-    bool isSuccess();
-    QNetworkReply::NetworkError networkError();
-    QString networkErrorString();
-    QtS3ReplyBase::S3Error s3Error();
-    QString s3ErrorString();
-    QString anyErrorString();
-
-    void prettyPrintReply();
-    QByteArray headerValue(const QByteArray &headerName);
-
-    bool boolValue();
-    int intValue();
-    QByteArray bytearrayValue();
-};
-
 class QtS3Private
 {
 public:
@@ -163,6 +133,36 @@ public:
     void clearCaches();
     QByteArray accessKeyId();
     QByteArray secretAccessKey();
+};
+
+class QtS3ReplyPrivate
+{
+public:
+    QtS3ReplyPrivate();
+    QtS3ReplyPrivate(QtS3ReplyBase::S3Error, QString errorString);
+
+    QByteArray m_byteArrayData;
+    bool m_intAndBoolDataValid;
+    int m_intAndBoolData;
+
+    QNetworkReply *m_networkReply;
+
+    QtS3ReplyBase::S3Error m_s3Error;
+    QString m_s3ErrorString;
+
+    bool isSuccess();
+    QNetworkReply::NetworkError networkError();
+    QString networkErrorString();
+    QtS3ReplyBase::S3Error s3Error();
+    QString s3ErrorString();
+    QString anyErrorString();
+
+    void prettyPrintReply();
+    QByteArray headerValue(const QByteArray &headerName);
+
+    bool boolValue();
+    int intValue();
+    QByteArray bytearrayValue();
 };
 
 QPM_END_NAMESPACE(com, github, msorvig, s3)

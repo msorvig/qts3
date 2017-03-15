@@ -44,87 +44,6 @@ QPM_BEGIN_NAMESPACE(com, github, msorvig, s3)
 Q_LOGGING_CATEGORY(qts3, "qts3.API")
 Q_LOGGING_CATEGORY(qts3_Internal, "qts3.internal")
 
-QtS3ReplyPrivate::QtS3ReplyPrivate()
-    : m_intAndBoolDataValid(false), m_networkReply(0),
-      m_s3Error(QtS3ReplyBase::InternalReplyInitializationError),
-      m_s3ErrorString("Internal error: un-initianlized QtS3Reply.")
-{
-
-}
-
-QtS3ReplyPrivate::QtS3ReplyPrivate(QtS3ReplyBase::S3Error error, QString errorString)
-    : m_intAndBoolDataValid(false), m_networkReply(0), m_s3Error(error),
-      m_s3ErrorString(errorString)
-{
-
-}
-
-QNetworkReply::NetworkError QtS3ReplyPrivate::networkError()
-{
-    return m_networkReply ? m_networkReply->error() : QNetworkReply::NoError;
-}
-
-QString QtS3ReplyPrivate::networkErrorString()
-{
-    return m_networkReply ? m_networkReply->errorString() : QString();
-}
-
-QtS3ReplyBase::S3Error QtS3ReplyPrivate::s3Error() { return m_s3Error; }
-
-QString QtS3ReplyPrivate::s3ErrorString() { return m_s3ErrorString; }
-
-QString QtS3ReplyPrivate::anyErrorString()
-{
-    if (networkError() != QNetworkReply::NoError)
-        return networkErrorString();
-    if (s3Error() != QtS3ReplyBase::NoError)
-        return s3ErrorString();
-    return QString();
-}
-
-void QtS3ReplyPrivate::prettyPrintReply()
-{
-    qDebug() << "Reply:                   :" << this;
-    qDebug() << "Reply Error State        :" << s3Error() << s3ErrorString();
-    if (m_networkReply == 0) {
-        qDebug() << "m_networkReply is null";
-        return;
-    }
-
-    qDebug() << "NetworkReply Error State :" << m_networkReply->error()
-             << m_networkReply->errorString();
-    qDebug() << "NetworkReply Headers:";
-    foreach (auto pair, m_networkReply->rawHeaderPairs()) {
-        qDebug() << "   " << pair.first << pair.second;
-    }
-    qDebug() << "S3 reply data            :" << bytearrayValue();
-}
-
-QByteArray QtS3ReplyPrivate::headerValue(const QByteArray &headerName)
-{
-    if (!m_networkReply)
-        return QByteArray();
-    return m_networkReply->rawHeader(headerName);
-}
-
-bool QtS3ReplyPrivate::isSuccess() { return m_s3Error == QtS3ReplyBase::NoError; }
-
-bool QtS3ReplyPrivate::boolValue()
-{
-    if (m_intAndBoolDataValid)
-        return bool(m_intAndBoolData);
-    return false;
-}
-
-int QtS3ReplyPrivate::intValue()
-{
-    if (m_intAndBoolDataValid)
-        return m_intAndBoolData;
-    return 0;
-}
-
-QByteArray QtS3ReplyPrivate::bytearrayValue() { return m_byteArrayData; }
-
 QtS3Private::QtS3Private() : m_networkAccessManager(0) {}
 
 QtS3Private::QtS3Private(QByteArray accessKeyId, QByteArray secretAccessKey)
@@ -852,5 +771,86 @@ QByteArray QtS3Private::secretAccessKey()
 {
     return m_secretAccessKeyProvider();
 }
+
+QtS3ReplyPrivate::QtS3ReplyPrivate()
+    : m_intAndBoolDataValid(false), m_networkReply(0),
+      m_s3Error(QtS3ReplyBase::InternalReplyInitializationError),
+      m_s3ErrorString("Internal error: un-initianlized QtS3Reply.")
+{
+
+}
+
+QtS3ReplyPrivate::QtS3ReplyPrivate(QtS3ReplyBase::S3Error error, QString errorString)
+    : m_intAndBoolDataValid(false), m_networkReply(0), m_s3Error(error),
+      m_s3ErrorString(errorString)
+{
+
+}
+
+QNetworkReply::NetworkError QtS3ReplyPrivate::networkError()
+{
+    return m_networkReply ? m_networkReply->error() : QNetworkReply::NoError;
+}
+
+QString QtS3ReplyPrivate::networkErrorString()
+{
+    return m_networkReply ? m_networkReply->errorString() : QString();
+}
+
+QtS3ReplyBase::S3Error QtS3ReplyPrivate::s3Error() { return m_s3Error; }
+
+QString QtS3ReplyPrivate::s3ErrorString() { return m_s3ErrorString; }
+
+QString QtS3ReplyPrivate::anyErrorString()
+{
+    if (networkError() != QNetworkReply::NoError)
+        return networkErrorString();
+    if (s3Error() != QtS3ReplyBase::NoError)
+        return s3ErrorString();
+    return QString();
+}
+
+void QtS3ReplyPrivate::prettyPrintReply()
+{
+    qDebug() << "Reply:                   :" << this;
+    qDebug() << "Reply Error State        :" << s3Error() << s3ErrorString();
+    if (m_networkReply == 0) {
+        qDebug() << "m_networkReply is null";
+        return;
+    }
+
+    qDebug() << "NetworkReply Error State :" << m_networkReply->error()
+             << m_networkReply->errorString();
+    qDebug() << "NetworkReply Headers:";
+    foreach (auto pair, m_networkReply->rawHeaderPairs()) {
+        qDebug() << "   " << pair.first << pair.second;
+    }
+    qDebug() << "S3 reply data            :" << bytearrayValue();
+}
+
+QByteArray QtS3ReplyPrivate::headerValue(const QByteArray &headerName)
+{
+    if (!m_networkReply)
+        return QByteArray();
+    return m_networkReply->rawHeader(headerName);
+}
+
+bool QtS3ReplyPrivate::isSuccess() { return m_s3Error == QtS3ReplyBase::NoError; }
+
+bool QtS3ReplyPrivate::boolValue()
+{
+    if (m_intAndBoolDataValid)
+        return bool(m_intAndBoolData);
+    return false;
+}
+
+int QtS3ReplyPrivate::intValue()
+{
+    if (m_intAndBoolDataValid)
+        return m_intAndBoolData;
+    return 0;
+}
+
+QByteArray QtS3ReplyPrivate::bytearrayValue() { return m_byteArrayData; }
 
 QPM_END_NAMESPACE(com, github, msorvig, s3)

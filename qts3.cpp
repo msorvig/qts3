@@ -3,27 +3,6 @@
 
 QPM_BEGIN_NAMESPACE(com, github, msorvig, s3)
 
-QtS3ReplyBase::QtS3ReplyBase(QtS3ReplyPrivate *replyPrivate) : d(replyPrivate) {}
-// error handling
-bool QtS3ReplyBase::isSuccess() { return d->isSuccess(); }
-
-QNetworkReply::NetworkError QtS3ReplyBase::networkError() { return d->networkError(); }
-
-QString QtS3ReplyBase::networkErrorString() { return d->networkErrorString(); }
-
-QtS3ReplyBase::S3Error QtS3ReplyBase::s3Error() { return d->s3Error(); }
-
-QString QtS3ReplyBase::s3ErrorString() { return d->s3ErrorString(); }
-
-QString QtS3ReplyBase::anyErrorString() { return d->anyErrorString(); }
-
-QByteArray QtS3ReplyBase::replyData() { return d->bytearrayValue(); }
-
-template <> void QtS3Reply<void>::value() {}
-template <> bool QtS3Reply<bool>::value() { return d->boolValue(); }
-template <> int QtS3Reply<int>::value() { return d->intValue(); }
-template <> QByteArray QtS3Reply<QByteArray>::value() { return d->bytearrayValue(); }
-
 /*
     \class QtS3
     \brief The QtS3 class provides a synchronous API for accessing Amazon S3 content.
@@ -139,5 +118,26 @@ QByteArray QtS3::secretAccessKey()
 {
     return d->secretAccessKey();
 }
+
+QtS3ReplyBase::QtS3ReplyBase(QtS3ReplyPrivate *replyPrivate) : d(replyPrivate) {}
+// error handling
+bool QtS3ReplyBase::isSuccess() { return d->isSuccess(); }
+
+QNetworkReply::NetworkError QtS3ReplyBase::networkError() { return d->networkError(); }
+
+QString QtS3ReplyBase::networkErrorString() { return d->networkErrorString(); }
+
+QtS3ReplyBase::S3Error QtS3ReplyBase::s3Error() { return d->s3Error(); }
+
+QString QtS3ReplyBase::s3ErrorString() { return d->s3ErrorString(); }
+
+QString QtS3ReplyBase::anyErrorString() { return d->anyErrorString(); }
+
+QByteArray QtS3ReplyBase::replyData() { return d->bytearrayValue(); }
+
+template <> void QtS3Reply<void>::value() {}
+template <> bool QtS3Reply<bool>::value() { return d->boolValue(); }
+template <> int QtS3Reply<int>::value() { return d->intValue(); }
+template <> QByteArray QtS3Reply<QByteArray>::value() { return d->bytearrayValue(); }
 
 QPM_END_NAMESPACE(com, github, msorvig, s3)
