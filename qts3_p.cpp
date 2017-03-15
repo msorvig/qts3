@@ -255,7 +255,8 @@ QByteArray QtS3Private::deriveSigningKey(const QByteArray &secretAccessKey,
 // to the bucket region and the s3 service. Returns whether the a key was
 // created.
 bool QtS3Private::checkGenerateSigningKey(QHash<QByteArray, QtS3Private::S3KeyStruct> *signingKeys,
-                                          const QDateTime &now, const QByteArray &secretAccessKey,
+                                          const QDateTime &now,
+                                          std::function<QByteArray()> secretAccessKeyProvider,
                                           const QByteArray &region, const QByteArray &service)
 {
     const int secondsInDay = 60 * 60 * 24;
@@ -267,7 +268,8 @@ bool QtS3Private::checkGenerateSigningKey(QHash<QByteArray, QtS3Private::S3KeySt
             return false;
     }
 
-    QByteArray key = deriveSigningKey(secretAccessKey, formatDate(now.date()), region, service);
+    QByteArray key =
+        deriveSigningKey(secretAccessKeyProvider(), formatDate(now.date()), region, service);
     S3KeyStruct keyStruct = {now, key};
     signingKeys->insert(region, keyStruct);
 
@@ -450,7 +452,7 @@ void QtS3Private::checkGenerateS3SigningKey(const QByteArray &region)
 {
     QDateTime now = QDateTime::currentDateTimeUtc();
     m_signingKeysLock.lockForWrite();
-    checkGenerateSigningKey(&m_signingKeys, now, m_secretAccessKeyProvider(), region, m_service);
+    checkGenerateSigningKey(&m_signingKeys, now, m_secretAccessKeyProvider, region, m_service);
     m_signingKeysLock.unlock();
     // std::tuple keyTimeCopy { currents3SigningKey, s3SigningKeyTimeStamp };
     // return keyTimeCopy;

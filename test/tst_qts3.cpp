@@ -73,17 +73,19 @@ void TestQtS3::checkGenerateSigningKey()
 
     QHash<QByteArray, QtS3Private::S3KeyStruct> signingKeys;
 
-    QVERIFY(QtS3Private::checkGenerateSigningKey(&signingKeys, t0, AwsTestData::secretAccessKey,
+    const auto secretAccessKeyProvider = []() { return AwsTestData::secretAccessKey; };
+
+    QVERIFY(QtS3Private::checkGenerateSigningKey(&signingKeys, t0, secretAccessKeyProvider,
                                                  AwsTestData::region, AwsTestData::service));
-    QVERIFY(!QtS3Private::checkGenerateSigningKey(&signingKeys, t0, AwsTestData::secretAccessKey,
+    QVERIFY(!QtS3Private::checkGenerateSigningKey(&signingKeys, t0, secretAccessKeyProvider,
                                                   AwsTestData::region, AwsTestData::service));
-    QVERIFY(!QtS3Private::checkGenerateSigningKey(&signingKeys, t1, AwsTestData::secretAccessKey,
+    QVERIFY(!QtS3Private::checkGenerateSigningKey(&signingKeys, t1, secretAccessKeyProvider,
                                                   AwsTestData::region, AwsTestData::service));
-    QVERIFY(QtS3Private::checkGenerateSigningKey(&signingKeys, t2, AwsTestData::secretAccessKey,
+    QVERIFY(QtS3Private::checkGenerateSigningKey(&signingKeys, t2, secretAccessKeyProvider,
                                                  AwsTestData::region, AwsTestData::service));
-    QVERIFY(QtS3Private::checkGenerateSigningKey(&signingKeys, t3, AwsTestData::secretAccessKey,
+    QVERIFY(QtS3Private::checkGenerateSigningKey(&signingKeys, t3, secretAccessKeyProvider,
                                                  AwsTestData::region, AwsTestData::service));
-    QVERIFY(QtS3Private::checkGenerateSigningKey(&signingKeys, t4, AwsTestData::secretAccessKey,
+    QVERIFY(QtS3Private::checkGenerateSigningKey(&signingKeys, t4, secretAccessKeyProvider,
                                                  AwsTestData::region, AwsTestData::service));
 }
 

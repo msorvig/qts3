@@ -109,7 +109,8 @@ public:
 
     // Signing key management
     static bool checkGenerateSigningKey(QHash<QByteArray, QtS3Private::S3KeyStruct> *signingKeys,
-                                        const QDateTime &now, const QByteArray &secretAccessKey,
+                                        const QDateTime &now,
+                                        std::function<QByteArray()> secretAccessKeyProvider,
                                         const QByteArray &m_region, const QByteArray &m_service);
 
     // QNetworkRequest creation and signing;
