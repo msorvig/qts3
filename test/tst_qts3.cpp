@@ -335,7 +335,7 @@ void TestQtS3::location()
 
     // EU bucket
     {
-        QtS3Reply<QByteArray> reply = s3.location("qtestbucket-eu");
+        QtS3Reply<QByteArray> reply = s3.location(testBucketEu);
         QVERIFY(reply.isSuccess());
         QCOMPARE(reply.value(), QByteArray("eu-west-1"));
     }
@@ -379,7 +379,7 @@ void TestQtS3::put()
     // EU bucket
     {
         QtS3Reply<void> reply =
-            s3.put("qtestbucket-eu", "foo-object", "foo-content-eu", QStringList());
+            s3.put(testBucketEu, "foo-object", "foo-content-eu", QStringList());
         QVERIFY(reply.isSuccess());
         QCOMPARE(reply.s3Error(), QtS3ReplyBase::NoError);
         QCOMPARE(reply.s3ErrorString(), QString());
@@ -501,7 +501,7 @@ void TestQtS3::get()
 
     // Eu bucket
     {
-        QtS3Reply<QByteArray> contents = s3.get("qtestbucket-eu", "foo-object");
+        QtS3Reply<QByteArray> contents = s3.get(testBucketEu, "foo-object");
         QVERIFY(contents.isSuccess());
         QCOMPARE(contents.value(), QByteArray("foo-content-eu"));
     }
@@ -559,16 +559,16 @@ void TestQtS3::thread_putget()
         QSKIP("QTS3_TEST_SECRET_ACCESS_KEY not set. This tests requires S3 access.");
 
 
-    runOnThreads(50, [&s3]()
+    runOnThreads(50, [&s3, testBucketUs, testBucketEu]()
     {
         {
             QtS3Reply<void> reply =
-                s3.put("qtestbucket-eu", "foo-object", "foo-content-eu", QStringList());
+                s3.put(testBucketEu, "foo-object", "foo-content-eu", QStringList());
             QVERIFY(reply.isSuccess());
         }
 
         {
-            QtS3Reply<QByteArray> contents = s3.get("qtestbucket-eu", "foo-object");
+            QtS3Reply<QByteArray> contents = s3.get(testBucketEu, "foo-object");
             QVERIFY(contents.isSuccess());
             QCOMPARE(contents.value(), QByteArray("foo-content-eu"));
         }
