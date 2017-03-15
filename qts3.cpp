@@ -100,8 +100,7 @@ QtS3Reply<int> QtS3::size(const QByteArray &bucket, const QString &path)
 }
 
 /*!
-    Uploads the given \a content  to \a path in \a bucket. \a headers may
-    contain optional request headers.
+    Downloads the content for the given \a path in \a bucket.
 */
 QtS3Reply<QByteArray> QtS3::get(const QByteArray &bucket, const QString &path)
 {
