@@ -109,6 +109,14 @@ QtS3Reply<QByteArray> QtS3::get(const QByteArray &bucket, const QString &path)
 }
 
 /*!
+    Deletes the content for the given \a path in \a bucket.
+*/
+QtS3Reply<void> QtS3::remove(const QByteArray &bucket, const QString &path)
+{
+    return QtS3Reply<void>(d->remove(bucket, path));
+}
+
+/*!
     Clear internal caches such as the bucket region cache. Call this
     function if/when a bucket region changes.
 */

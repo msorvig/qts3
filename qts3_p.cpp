@@ -820,6 +820,18 @@ QtS3ReplyPrivate *QtS3Private::get(const QByteArray &bucketName, const QString &
     return s3Reply;
 }
 
+QtS3ReplyPrivate *QtS3Private::remove(const QByteArray &bucketName, const QString &path)
+{
+    QtS3ReplyPrivate *s3Reply = processS3Request("DELETE", bucketName, path.toUtf8(), QByteArray(),
+                                                 QByteArray(), QStringList());
+
+    // Read content
+    if (s3Reply->m_s3Error == QtS3ReplyBase::NoError) {
+        s3Reply->m_byteArrayData = s3Reply->m_networkReply->readAll();
+    }
+    return s3Reply;
+}
+
 void QtS3Private::clearCaches()
 {
     m_signingKeysLock.lockForWrite();

@@ -158,6 +158,8 @@ public:
     QtS3ReplyPrivate *exists(const QByteArray &bucketName, const QString &path);
     QtS3ReplyPrivate *size(const QByteArray &bucketName, const QString &path);
     QtS3ReplyPrivate *get(const QByteArray &bucketName, const QString &path);
+    QtS3ReplyPrivate *remove(const QByteArray &bucket, const QString &path);
+
     void clearCaches();
     QByteArray accessKeyId();
     QByteArray secretAccessKey();

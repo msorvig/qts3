@@ -38,6 +38,7 @@ private slots:
     void exists();
     void size();
     void get();
+    void remove();
 
     // Threaded integration tests
     void thread_putget();
@@ -506,6 +507,66 @@ void TestQtS3::get()
         QtS3Reply<QByteArray> contents = s3.get(testBucketEu, "foo-object");
         QVERIFY(contents.isSuccess());
         QCOMPARE(contents.value(), QByteArray("foo-content-eu"));
+    }
+}
+
+void TestQtS3::remove()
+{
+    QByteArray awsKeyId = qgetenv("QTS3_TEST_ACCESS_KEY_ID");
+    QByteArray awsSecretKey = qgetenv("QTS3_TEST_SECRET_ACCESS_KEY");
+    QByteArray testBucketEu = qgetenv("QTS3_TEST_BUCKET_EU");
+    QByteArray objectName = "foo-object-delete";
+    QByteArray objectContent = "foo-object-delete-content";
+
+    if (awsKeyId.isEmpty())
+        QSKIP("QTS3_TEST_ACCESS_KEY_ID not set. This tests requires S3 access.");
+    if (awsSecretKey.isEmpty())
+        QSKIP("QTS3_TEST_SECRET_ACCESS_KEY not set. This tests requires S3 access.");
+    if (testBucketEu.isEmpty())
+        QSKIP("QTS3_TEST_BUCKET_EU not set. Should be set to a"
+              "us-east-1 and eu-west-1 bucket with write access");
+
+    QtS3 s3(awsKeyId, awsSecretKey);
+
+    // Remove object (clean up from previous test runs)
+    {
+        QtS3Reply<void> remove = s3.remove(testBucketEu, objectName);
+        QVERIFY(remove.isSuccess());
+    }
+
+    // Veryfy object non-existence
+    {
+        QtS3Reply<bool> exists = s3.exists(testBucketEu, objectName);
+        QVERIFY(exists.isSuccess());
+        QVERIFY(!exists.value());
+    }
+
+    // Crate object
+    {
+        QtS3Reply<void> reply = s3.put(testBucketEu, objectName, objectContent, QStringList());
+        QVERIFY(reply.isSuccess());
+        QCOMPARE(reply.s3Error(), QtS3ReplyBase::NoError);
+        QCOMPARE(reply.s3ErrorString(), QString());
+    }
+
+    // Veryfy object existence
+    {
+        QtS3Reply<bool> exists = s3.exists(testBucketEu, objectName);
+        QVERIFY(exists.isSuccess());
+        QVERIFY(exists.value());
+    }
+
+    // Remove object
+    {
+        QtS3Reply<void> remove = s3.remove(testBucketEu, objectName);
+        QVERIFY(remove.isSuccess());
+    }
+
+    // Veryfy object non-existence
+    {
+        QtS3Reply<bool> exists = s3.exists(testBucketEu, objectName);
+        QVERIFY(exists.isSuccess());
+        QVERIFY(!exists.value());
     }
 }
 

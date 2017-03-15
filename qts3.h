@@ -76,6 +76,7 @@ public:
     QtS3Reply<bool> exists(const QByteArray &bucket, const QString &path);
     QtS3Reply<int> size(const QByteArray &bucket, const QString &path);
     QtS3Reply<QByteArray> get(const QByteArray &bucket, const QString &path);
+    QtS3Reply<void> remove(const QByteArray &bucket, const QString &path);
 
     void clearCaches();
     QByteArray accessKeyId();
