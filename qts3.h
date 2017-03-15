@@ -1,6 +1,8 @@
 #ifndef QTS3_H
 #define QTS3_H
 
+#include <functional>
+
 #include <QtCore>
 #include <QtNetwork>
 
