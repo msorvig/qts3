@@ -1,13 +1,15 @@
 Qt C++ API for Amazon S3
+========================
 
 This project provides a simple, synchronous, C++ API for amazon S3.
 
-###Building
+Building
+------------------------
 
 Include qts3.pri in your project, or com_github_msorvig_s3.pri for the
 namespaced qpm version.
 
-###Using
+---------------------
 
 To begin, you need an AWS key, which consists of a key id and a secret:
 
@@ -30,7 +32,8 @@ The s3 calls are synchronous and blocks until the response is available.
 The bucket must exist and be accessible -- bucket management is not
 covered by this API.
 
-###Error Handling
+Error Handling
+------------------------
 
 There are two levels of errors: Network errors and S3 errors. Network
 errors are QNetworkAccessManager errors, such as "no network connection".
@@ -55,7 +58,8 @@ Finally, the result can be obtained by calling value()
 
     T QtS3Reply<T>::value()
 
-###Threading
+Threading
+------------------------
 
 The QtS3 accessor functions (get, but, exists, size) are thread-safe
 and may be called from any thread. The QtS3 object itself should be
@@ -65,7 +69,8 @@ QtS3 signs upload requests. This includes computing a sha256 hash of
 upload content and will use CPU according to content size. Using one
 thread per request will parallelize these computations.
 
-###Running tests
+Running tests
+------------------------
 
 The "test" directory contains the autotest and testing data. A full test
 run requires a key for S3 access and a couple of test buckets. These are
