@@ -399,27 +399,18 @@ QNetworkRequest *QtS3Private::createSignedRequest(const QByteArray &verb, const 
     return request;
 }
 
-namespace
-{
-// The read buffer for the current in-flight request. The synchronous API guarantees
-// that there will be only one reuest in progress per thread at any time.
-__thread QBuffer *m_inFlightBuffer = 0;
-}
-
 QNetworkReply *QtS3Private::sendRequest(const QByteArray &verb, const QNetworkRequest &request,
                                         const QByteArray &payload)
 {
 
-    m_inFlightBuffer = 0;
-    if (!payload.isEmpty()) {
-        m_inFlightBuffer = new QBuffer(const_cast<QByteArray *>(&payload));
-        m_inFlightBuffer->open(QIODevice::ReadOnly);
-    }
+    QBuffer payloadBuffer(const_cast<QByteArray *>(&payload));
+    if (!payload.isEmpty())
+        payloadBuffer.open(QIODevice::ReadOnly);
 
     // Send request
-    // QNetworkAccessManager *qnam = new QNetworkAccessManager;
-    QNetworkReply *reply =
-        m_networkAccessManager->sendCustomRequest(request, verb, m_inFlightBuffer);
+    QNetworkReply *reply = m_networkAccessManager->sendCustomRequest(
+        request, verb, payload.isEmpty() ? nullptr : &payloadBuffer);
+
     return reply;
 }
 
